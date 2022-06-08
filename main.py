@@ -1,32 +1,23 @@
-"""TC:O(n+m),SC:O(m or n)"""
+"""TC:O(n),SC:O(n)"""
 
 class Solution(object):
-    def intersect(self, nums1, nums2):
+    def reverseWords(self, s):
         """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
+        :type s: str
+        :rtype: str
         """
-        dict_nary = {}
-        result = []
-        for num in nums1:
-            if num in dict_nary:
-                dict_nary[num]=dict_nary[num]+1
-            else:
-                dict_nary[num]=1
-        for num in nums2:
-            if num in dict_nary and dict_nary[num]>0:
-                result.append(num)
-                dict_nary[num]-=1
-        return result
-      
-if __name__== "__main__":
-    nums1=[4,9,5]
-    nums2=[9,4,9,4,8]
-    a=Solution()
-    ans=a.intersect(nums1,nums2)
-    print(ans)              
-                
-                
-                
+        words=s.split()
+        k=[]
+        for word in words:
+          k.append((reversed(word)))
+          k.append(" ")
         
+        return "".join(k).strip()
+            
+
+                
+if __name__== "__main__":
+    s = "Let's take LeetCode contest"
+    a=Solution()
+    ans=a.reverseWords(s)
+    print(ans)         
