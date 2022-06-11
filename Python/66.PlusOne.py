@@ -17,7 +17,7 @@ class Solution(object):
 
 
 if __name__ == "__main__":
-    digits=[4,3,9,9]
+    digits=[4,3,2,1]
     a=Solution()
     i=a.plusOne(digits)
     print(i)
