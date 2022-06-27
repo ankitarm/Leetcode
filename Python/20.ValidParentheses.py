@@ -13,7 +13,8 @@ class Solution(object):
         return True if not stack else False
 
 if __name__ == "__main__":
-    s = ")"
+    s = "{{}))"
+    #s="()"
     a=Solution()
     i=a.isValid(s)
     print(i)
