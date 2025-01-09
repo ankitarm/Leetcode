@@ -16,7 +16,7 @@ class Solution(object):
                 return True
             else:
                 aset.add(element)
-        return False"""
+        return False
 
         #Solution2
         nums.sort()
@@ -27,6 +27,14 @@ class Solution(object):
             else:
                 i+=1
         return False
+        """
+
+        setnum = set()
+        for num in nums:
+            if num in setnum:
+                return True
+            setnum.add(num)
+
 
 
 
