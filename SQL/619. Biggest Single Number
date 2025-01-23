@@ -1,0 +1,5 @@
+select max(nn.num) as num from
+(SELECT DISTINCT num, count(num) as cunt
+from MyNumbers n
+group by num) as nn
+where nn.cunt = 1
