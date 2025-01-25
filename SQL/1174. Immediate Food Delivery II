@@ -1,0 +1,33 @@
+/*SELECT ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END
+)/COUNT(customer_id)*100,2) AS immediate_percentage
+FROM Delivery
+WHERE (customer_id,order_date) IN
+(SELECT customer_id, MIN(order_date)
+FROM Delivery
+GROUP BY customer_id)
+
+Why Not Use COUNT?
+If we used COUNT in this scenario:
+
+sql
+Copy
+Edit
+COUNT(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END)
+Here’s what would happen:
+
+COUNT only counts non-NULL values.
+Since CASE always returns either 1 or 0 (and neither of these is NULL), COUNT would count all rows, not just the rows where the condition is true.
+
+
+*/
+
+
+WITH FIRSTORDERS AS (
+    SELECT customer_id, order_date, customer_pref_delivery_date,
+    RANK() OVER (PARTITION BY customer_id ORDER BY order_date ASC) AS rankmin
+    FROM Delivery
+)
+SELECT ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END )/COUNT(customer_id)*100,2) AS immediate_percentage
+FROM FIRSTORDERS
+WHERE rankmin = 1
+
