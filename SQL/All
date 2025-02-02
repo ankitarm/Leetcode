@@ -1,0 +1,87 @@
+570. Managers with at Least 5 Direct Reports
+
+HAving can carry count, sum, such functs which where cannot
+
+# Write your MySQL query statement below
+SELECT E1.name
+FROM Employee E1
+JOIN Employee E2 ON E1.id=E2.managerId
+GROUP BY E2.managerId
+HAVING COUNT(E2.managerId)>=5;
+
+
+1934. Confirmation Rate
+
+use of avg
+
+# Write your MySQL query statement below
+SELECT S.user_id, ROUND(AVG( if(C.action = "confirmed",1,0)) , 2) AS confirmation_rate
+FROM Signups S
+LEFT JOIN Confirmations C
+ON S.user_id = C.user_id
+GROUP BY S.user_id
+
+1193. Monthly Transactions I
+
+DATE_FORMAT(trans_date, '%Y-%m'), SUBSTRING(trans_date,1,7), '
+try to use sum when using conditions even if you need count use 1 or 0 if(cond, 1,0)
+
+SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country, COUNT(id) AS trans_count, SUM(CASE WHEN state = "approved" THEN 1 ELSE 0 END) AS approved_count,SUM(amount) AS trans_total_amount, SUM(CASE WHEN state = "approved" THEN amount ELSE 0 END)AS approved_total_amount
+FROM Transactions
+GROUP BY month, country
+
+SELECT SUBSTRING(trans_date,1,7) AS month,
+country,
+COUNT(id) AS trans_count,
+SUM(IF(state = 'approved' ,1,0)) AS approved_count,
+SUM(amount)AS trans_total_amount,
+SUM(IF(state = 'approved',amount,0))AS approved_total_amount
+FROM Transactions
+GROUP BY month, country
+
+1174. Immediate Food Delivery II
+
+/*SELECT ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END
+)/COUNT(customer_id)*100,2) AS immediate_percentage
+FROM Delivery
+WHERE (customer_id,order_date) IN
+(SELECT customer_id, MIN(order_date)
+FROM Delivery
+GROUP BY customer_id)
+
+Why Not Use COUNT?
+If we used COUNT in this scenario:
+
+sql
+Copy
+Edit
+COUNT(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END)
+Here’s what would happen:
+
+COUNT only counts non-NULL values.
+Since CASE always returns either 1 or 0 (and neither of these is NULL), COUNT would count all rows, not just the rows where the condition is true.
+
+
+*/
+WITH FIRSTORDERS AS (
+    SELECT customer_id, order_date, customer_pref_delivery_date,
+    RANK() OVER (PARTITION BY customer_id ORDER BY order_date ASC) AS rankmin
+    FROM Delivery
+)
+SELECT ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END )/COUNT(customer_id)*100,2) AS immediate_percentage
+FROM FIRSTORDERS
+WHERE rankmin = 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
