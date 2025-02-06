@@ -73,6 +73,127 @@ FROM FIRSTORDERS
 WHERE rankmin = 1
 
 
+196. Delete Duplicate Emails
+
+DELETE P1
+FROM Person P1, Person P2
+WHERE P1.email=P2.email AND P1.id>P2.id
+
+
+DELETE FROM Person WHERE id NOT IN (SELECT minid FROM(SELECT MIN(id) AS minid
+FROM Person
+GROUP BY email) AS A)
+/*
+Understanding MySQL's Limitation
+In MySQL, you cannot directly delete rows while selecting from the same table in a subquery. If you try this query:
+
+
+DELETE FROM Person
+WHERE Id NOT IN (SELECT MIN(Id) FROM Person GROUP BY Email);
+It may throw the error:
+
+"You can't specify target table 'Person' for update in FROM clause"
+
+This happens because MySQL does not allow modifying and selecting from the same table in a subquery at the same time.
+*/
+
+
+176. Second Highest Salary
+
+SELECT (SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1) AS SecondHighestSalary
+
+SELECT (SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1) AS SecondHighestSalary
+
+/*
+OFFSET is to remove.
+offset is performed first and then limit is
+so 1st record removed and next record returned.*/
+
+1484. Group Sold Products By The Date
+
+Concatenates distinct product names for each date.
+Ensures the product names are sorted lexicographically (alphabetically).
+Uses , as a separator.
+
+
+SELECT sell_date, COUNT( DISTINCT product) AS num_sold,
+GROUP_CONCAT( DISTINCT product)AS products
+FROM Activities
+GROUP BY sell_date
+/*
+GROUP_CONCAT()
+Concatenates distinct product names for each date.
+Ensures the product names are sorted lexicographically (alphabetically).
+Uses , as a separator.
+
+SELECT sell_date,
+       COUNT(DISTINCT product) AS num_sold,
+       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ', ') AS products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
+
+
+
+1978. Employees Whose Manager Left the Company
+
+/*SELECT employee_id
+FROM Employees
+WHERE salary<30000
+and manager_id not in
+(SELECT employee_id FROM Employees )
+ORDER BY employee_id*/
+/*
+SELECT E1.employee_id
+FROM Employees E1
+LEFT JOIN Employees E2
+ON E1.manager_id = E2.employee_id
+WHERE E1.salary<30000
+AND E1.manager_id IS NOT NULL
+AND E2.employee_id IS NULL
+ORDER BY employee_id
+*/
+
+SELECT employee_id
+FROM Employees E
+WHERE salary<30000
+AND manager_id IS NOT NULL
+AND NOT EXISTS (SELECT 1 FROM Employees M WHERE  M.employee_id =E.manager_id)
+ORDER BY employee_id
+
+
+NOT EXISTS---
+SELECT 1 FROM Employees M WHERE  M.employee_id =E.manager_id- only checking if a row exists or not.
+if 1 is returned means row exists, then not exists is false else true.
+
+
+626. Exchange Seats
+
+SELECT
+    CASE
+    WHEN id%2 = 1 AND id != (SELECT MAX(id) FROM Seat) THEN id+1
+    WHEN id%2=0 THEN (id-1)
+    ELSE id END AS id,
+    student
+FROM Seat
+ORDER BY id
+
+/*LEAD(id) OVER (ORDER BY id)
+LAG(id) OVER (ORDER BY id)
+CANNOT USE ONLY LEAD AND ONLY LAG
+ */
+
+
+
+
+
+
 
 
 
