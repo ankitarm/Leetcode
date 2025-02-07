@@ -1,0 +1,21 @@
+
+For bucket you have to do counting 2 times as shown below grouping with two times.
+
+
+
+SELECT TWEETNUM AS tweet_bucket, COUNT(user_id) AS users_num
+FROM
+(SELECT COUNT(tweet_id) AS TWEETNUM, user_id
+FROM tweets
+WHERE tweet_date BETWEEN '01/01/2022' AND '12/31/2022'
+GROUP BY user_id) AS BUCKET
+GROUP BY TWEETNUM
+
+WITH BUCKET AS
+(SELECT  user_id AS user_id, COUNT(tweet_id) AS tweetnums
+FROM tweets
+WHERE tweet_date BETWEEN '01/01/2022' AND '12/31/2022'
+GROUP BY user_id)
+SELECT tweetnums AS tweet_bucket, COUNT(user_id) AS users_num
+FROM BUCKET
+GROUP BY tweetnums
