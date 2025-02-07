@@ -1,0 +1,10 @@
+SELECT page_id
+FROM pages P
+WHERE NOT EXISTS (
+SELECT 1
+FROM page_likes L
+WHERE P.page_id = L.page_id
+)
+ORDER BY page_id
+
+--The NOT EXISTS condition checks whether a subquery returns any rows. It returns TRUE if the subquery returns no rows and FALSE if at least one row exists.
