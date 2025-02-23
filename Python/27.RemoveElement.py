@@ -5,9 +5,11 @@ class Solution(object):
         :type val: int
         :rtype: int
         """
+        '''
         while nums.count(val):
             nums.remove(val)
         return len(nums)
+        '''
 
         """i=0
         count=0
@@ -17,6 +19,13 @@ class Solution(object):
             else:
                 i+=1
         return len(nums)"""
+
+        left = 0
+        for index in range(len(nums)):
+            if val != nums[index]:
+                nums[left] = nums[index]
+                left+=1
+        return left
 
 
 
