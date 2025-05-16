@@ -1,0 +1,5 @@
+SELECT user_id
+FROM emails E
+join texts T on E.email_id = T.email_id
+where T.signup_action = 'Confirmed'
+and T.action_date = E.signup_date + INTERVAL '1 DAY'
