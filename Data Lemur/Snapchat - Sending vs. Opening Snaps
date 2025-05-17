@@ -1,0 +1,17 @@
+WITH send_open AS
+(SELECT user_id,
+sum(CASE WHEN activity_type = 'send' THEN time_spent ELSE 0 END) AS send,
+sum(CASE WHEN activity_type = 'open' THEN time_spent ELSE 0 END) AS open
+FROM activities
+WHERE activity_type IN ('send','open')
+GROUP BY user_id	)
+
+SELECT AB.age_bucket,
+ROUND(SO.send/(SO.send+SO.open)*100,2) AS send_perc,
+ROUND(SO.open/(SO.send+SO.open)*100,2) AS open_perc
+FROM send_open SO
+INNER JOIN age_breakdown AB
+ON SO.user_id = AB.user_id
+ORDER BY AB.age_bucket
+
+

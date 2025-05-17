@@ -1,0 +1,6 @@
+SELECT  Q.query_id, (SUM(CASE WHEN Q.query_id THEN 1 ELSE 0 END))
+FROM queries Q
+RIGHT JOIN employees E
+ON Q.employee_id = E.employee_id
+GROUP BY Q.query_id
+
